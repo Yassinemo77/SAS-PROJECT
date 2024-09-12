@@ -1,0 +1,323 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct etudiants{
+    int id;
+    char nom[100];
+    char prenom[100];
+    char dateDeNaissance[100];
+    char departement[100];
+    float noteGenerale;
+};
+
+// departement : math , physique, science;
+struct etudiants etudiant[100];
+int idCounter = 0;
+int numEtediant = 0;
+
+void menu(){
+    printf("------------------------------------- \n");
+
+    printf("\t 1- Ajouter un etudiant : \n");
+    printf("\t 2- update un etudiant : \n");
+    printf("\t 3- supprimer un etudiant : \n");
+    printf("\t 4- afficher  les informations completes des etudiants, : \n");
+    printf("\t 5- afficher la moyenne generale : \n");
+    printf("\t 6- afficher les statistiques : \n");
+}
+
+
+void moyenneGenerale(){
+    char T[20][50];
+    int counter = 0 ;
+    int alreadyEntred = 0;
+
+ // liste departement
+  for (int i = 0; i < numEtediant; i++){
+    alreadyEntred = 0;
+      for(int j = 0 ; j < numEtediant ; j++ ){
+            if(strcmp(etudiant[i].departement , T[j]) == 0){
+                alreadyEntred = 1;
+                break;
+            }
+        }
+        if(!alreadyEntred){
+                strcpy(T[counter] , etudiant[i].departement);
+                counter++;
+        }
+  }
+  // moyene generale
+    float sommeChaqueDepartemet = 0;
+  for(int i = 0 ; i < counter ; i++){
+        float somme = 0;
+        float lenghEleve = 0;
+
+        printf("-----------------------------  \n");
+        printf("moyenne generale de la departement : %s \n", T[i]);
+
+
+        for(int j = 0 ; j < numEtediant ; j++ ){
+            if(strcmp( T[i], etudiant[j].departement ) == 0){ // kal9aw nfss departement
+                somme += etudiant[j].noteGenerale;
+                lenghEleve++;
+            }
+        }
+    printf("la somme generale : %.2f \n", somme);
+    printf("la meyenne generale : %.2f \n", somme / lenghEleve);
+
+    // somme moyennt genrale de chaque departemet 
+    sommeChaqueDepartemet += somme / lenghEleve;
+  }
+
+    printf("la meyenne generale la universite  : %.2f \n", sommeChaqueDepartemet / counter);
+}
+
+
+void ajouter(){
+    printf("entrer votre nom : ");
+    scanf(" %[^\n]s",&etudiant[numEtediant].nom);
+
+    printf("nentrer votre prenom : ");
+    scanf(" %[^\n]s",&etudiant[numEtediant].prenom);
+
+    printf("entrer la date de naissance : ");
+    scanf(" %[^\n]s",&etudiant[numEtediant].dateDeNaissance);
+
+    printf("entrer la departement : \n");
+    scanf(" %[^\n]s",&etudiant[numEtediant].departement);
+
+    printf("entrer la note generale : ");
+    scanf("%f",&etudiant[numEtediant].noteGenerale);
+
+    etudiant[numEtediant].id = idCounter++;
+
+    numEtediant++;
+}
+
+
+void rechercherParLeNom(){
+    char name[100];
+    printf("entrer le nom de l'etudiant: ");
+    scanf("%s",&name);
+
+int m = 0;
+
+for(int j = 0 ; j < numEtediant ; j++){
+    int res = strcmp(etudiant[j].nom, name);
+
+    if(res == 0){
+            printf("le nom : %s : \n", etudiant[j].nom);
+
+            printf("entrer votre prenom : %s \n",etudiant[j].prenom);
+
+            printf("entrer la date de naissance : %s \n", etudiant[j].dateDeNaissance);
+
+            printf("entrer la departement : %s \n",etudiant[j].departement);
+
+            printf("entrer la note generale : %f \n", etudiant[j].noteGenerale);
+
+            printf("id: %d \n", etudiant[j].id);
+             m++;
+    }
+    if(m == 0){
+        printf("eleve not found");
+    }
+}
+}
+
+int rechercherParId(){
+    int idsup;
+    printf("entrer ID de element supprimer : ");
+    scanf("%d",&idsup);
+
+    for(int i = 0 ; i < numEtediant ; i++ ){
+        if(etudiant[i].id == idsup ){
+                return i;
+            }
+    }
+                return -1;
+}
+
+
+void supprimer(){
+int index = rechercherParId();
+
+int isDelete = 0;
+
+        if ( index == -1 ){
+            return;
+        }
+        for(int j = index ; j < numEtediant - 1 ; j++ ){
+            etudiant[j] = etudiant[j + 1];
+        }
+        numEtediant--;
+
+}
+
+void modifier(){
+    int idupdate;
+    printf("entrer ID : "); scanf("%d",&idupdate);
+
+int m = 0;
+
+for(int j = 0 ; j < numEtediant ; j++){
+    if(etudiant[j].id == idupdate){
+        printf("entrer votre nom : ");
+        scanf(" %[^\n]s",&etudiant[j].nom);
+
+        printf("nentrer votre prenom : ");
+        scanf(" %[^\n]s",&etudiant[j].prenom);
+
+        printf("entrer la date de naissance : ");
+        scanf(" %[^\n]s",&etudiant[j].dateDeNaissance);
+
+        printf("entrer la nouvelle departement : ");
+        scanf(" %[^\n]s",&etudiant[j].departement);
+
+        printf("entrer la note generale : ");
+        scanf("%f",&etudiant[j].noteGenerale);
+            m++;
+    }
+}if(m == 0){
+    printf("eleve not found");
+    }
+}
+
+void affichage(){
+    for(int j = 0 ; j < numEtediant ; j++ ){
+            printf("-------------- ELEVE N : %d --------------------- \n", j+ 1);
+
+            printf("le nom : %s : \n", etudiant[j].nom);
+
+            printf("entrer votre prenom : %s \n",etudiant[j].prenom);
+
+            printf("entrer la date de naissance : %s \n", etudiant[j].dateDeNaissance);
+
+            printf("entrer la departement : %s \n",etudiant[j].departement);
+
+            printf("entrer la note generale : %.2f \n", etudiant[j].noteGenerale);
+
+            printf("id: %d \n", etudiant[j].id);
+    }
+}
+
+
+ // afficher les statistic :
+
+ void nbrTotal(){
+     printf("le nombre total d'étudiants inscrits : %d \n", numEtediant);
+
+ }
+
+ void seuil(){
+     int sup = 14;
+     int noteSup = 0;
+
+
+    for(int i = 0 ; i < numEtediant ; i++){
+        if( etudiant[i].noteGenerale >= sup ){
+            printf("------------------------------------------------- \n");
+
+            printf("eleve N: %d supperieur au seuil : \n",i + 1);
+            printf("nome : %s \n",etudiant[i].nom);
+            printf("prenom : %s \n",etudiant[i].prenom);
+            printf("la notes  : %.2f \n",etudiant[i].noteGenerale);
+            noteSup++;
+        }
+    }
+
+    if(noteSup == 0){
+     printf("aucun eleve n'est superieure au seuil. \n");
+    }
+ }
+
+ void troisBestNotes(){
+     char temp[numEtediant];
+
+    for(int i = 0 ; i < numEtediant ; i++){
+        for(int j = 0 ; j < numEtediant ; j++){
+            if(etudiant[j].noteGenerale < etudiant[j+1].noteGenerale){
+                temp = etudiant[j].noteGenerale;
+                etudiant[j].noteGenerale = etudiant[j + 1].noteGenerale;
+                etudiant[j + 1].noteGenerale = temp;
+            }
+        }
+    }
+
+    float max1 = etudiant[0].noteGenerale;
+    float max2 = etudiant[1].noteGenerale;
+    float max3 = etudiant[2].noteGenerale;
+
+    printf("max1 = %.2f",max1);
+    printf("max2 = %.2f",max2);
+    printf("max3 = %.2f",max3);
+
+
+ }
+
+
+
+int main() {
+      int choix;
+      do{
+        menu();
+          printf("entrer un choix : ");
+          scanf("%d",&choix);
+
+    switch(choix){
+    case 1 :
+        ajouter();
+        break;
+    case 2 :
+        modifier();
+        break;
+    case 3 :
+        supprimer();
+        break;
+     case 4 :
+        affichage();
+        break;
+    case 5 :
+        moyenneGenerale();
+       break;
+     case 6 :
+        rechercherParLeNom();
+        break;
+        int statisticChoix;
+    case 6 :
+        do{
+            printf("\t 1- Afficher le nombre total d'étudiants inscrits. \n");
+            printf("\t 2- Afficher le nombre d'étudiants dans chaque département. \n");
+            printf("\t 3- Afficher les etudiants ayant une moyenne generale superieure à un certain seuil. \n");
+            printf("\t 4- Afficher les 3 étudiants ayant les meilleures notes. \n");
+            printf("\t 5- Afficher le nombre d'étudiants ayant réussi dans chaque département \n");
+
+            printf("choisir un choix : \n");
+            scanf("%d",&statisticChoix);
+
+            switch(statisticChoix){
+            case 1 :
+                nbrTotal();
+                break;
+
+            case 2 :
+
+                break;
+
+            case 3 :
+                seuil();
+                break;
+
+            case 4 :
+                troisBestNotes();
+                break;
+            }
+        }while(statisticChoix < 1);
+        break;
+    }
+
+}while(choix < 7);
+
+return 0;
+}
