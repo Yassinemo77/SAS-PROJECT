@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 struct etudiants{
     int id;
     char nom[100];
@@ -29,6 +27,9 @@ void menu(){
     printf("\t 6- afficher les statistiques : \n");
     printf("\t 7- Rechercher un ewtudiant par son nom : \n");
     printf("\t 8- Afficher la liste des étudiants inscrits dans un département spécifique: \n");
+    printf("\t 9- Tri alphabétique des etudiants en fonction de leur nom (de A à Z ou de Z à A).: \n");
+    printf("\t 10- Tri des etudiants par moyenne generale, du plus eleve au plus faible ou inversement. :  \n");
+
 }
 
 void ajouter(){
@@ -50,38 +51,6 @@ void ajouter(){
     etudiant[numEtediant].id = idCounter++;
 
     numEtediant++;
-}
-
-void rechercherParLeNom(){
-    char name[100];
-    printf("entrer le nom de l'etudiant: ");
-    scanf("%s",&name);
-
-int m = 0;
-
-for(int j = 0 ; j < numEtediant ; j++){
-    int res = strcmp(etudiant[j].nom, name);
-
-    if(res == 0){
-            printf("----------------------------------------- \n");
-
-            printf("le nom : %s : \n", etudiant[j].nom);
-
-            printf("entrer votre prenom : %s \n",etudiant[j].prenom);
-
-            printf("entrer la date de naissance : %s \n", etudiant[j].dateDeNaissance);
-
-            printf("entrer la departement : %s \n",etudiant[j].departement);
-
-            printf("entrer la note generale : %.2f \n", etudiant[j].noteGenerale);
-
-            printf("id: %d \n", etudiant[j].id);
-             m++;
-    }
-    if(m == 0){
-        printf("eleve not found");
-    }
-}
 }
 
 int rechercherParId(){
@@ -205,8 +174,6 @@ void moyenneGenerale(){
 
     printf("la meyenne generale la universite  : %.2f \n", sommeChaqueDepartemet / counter);
 }
-
-
  // afficher les statistic :
 
  void nbrTotal(){
@@ -215,6 +182,7 @@ void moyenneGenerale(){
  }
 
  void nbrChaqueDep(){
+
     char T[20][50];
     int index = 0;
     int isFound = 0;
@@ -330,6 +298,38 @@ void moyenneGenerale(){
     }
  }
 
+ void rechercherParLeNom(){
+    char name[100];
+    printf("entrer le nom de l'etudiant: ");
+    scanf("%s",&name);
+
+int m = 0;
+
+for(int j = 0 ; j < numEtediant ; j++){
+    int res = strcmp(etudiant[j].nom, name);
+
+    if(res == 0){
+            printf("----------------------------------------- \n");
+
+            printf("le nom : %s : \n", etudiant[j].nom);
+
+            printf("entrer votre prenom : %s \n",etudiant[j].prenom);
+
+            printf("entrer la date de naissance : %s \n", etudiant[j].dateDeNaissance);
+
+            printf("entrer la departement : %s \n",etudiant[j].departement);
+
+            printf("entrer la note generale : %.2f \n", etudiant[j].noteGenerale);
+
+            printf("id: %d \n", etudiant[j].id);
+             m++;
+    }
+    if(m == 0){
+        printf("eleve not found");
+    }
+}
+}
+
  void listeAmieChaqueDepartement(){
    char T[20][50];
     int index = 0;
@@ -372,6 +372,52 @@ void moyenneGenerale(){
     }
 
  }
+
+ void triAlphabitique() {
+    struct etudiants tmp;
+    for(int i = 0; i < numEtediant - 1; i++) {
+        for(int x = 0; x < numEtediant - i - 1; x++) {
+            if(strcmp(etudiant[x].nom, etudiant[x + 1].nom) > 0) {
+                tmp = etudiant[x];
+                etudiant[x] = etudiant[x + 1];
+                etudiant[x + 1] = tmp;
+            }
+        }
+    }
+    for (int i = 0; i < numEtediant; i++) {
+        printf("**************************\n");
+        printf("Nom: %s\n", etudiant[i].nom);
+        printf("Prenom: %s\n", etudiant[i].prenom);
+        printf("Departement: %s\n", etudiant[i].departement);
+        printf("Note generale: %.2f\n", etudiant[i].noteGenerale);
+        printf("Date de naissance: %d/%d/%d\n", etudiant[i].dateDeNaissance, etudiant[i].dateDeNaissance, etudiant[i].dateDeNaissance);
+        printf("| ID: >%d<|\n", etudiant[i].id);
+    }
+ }
+
+ void triMoyenne(){
+     struct etudiants tmp;
+
+ for(int i = 0 ; i < numEtediant - 1 ; i++ ){
+    for(int j = 0 ; j < numEtediant - i - 1 ; j++){
+        if(etudiant[i].noteGenerale > etudiant[i + 1].noteGenerale  ){
+            tmp = etudiant[i];
+            etudiant[i] = etudiant[i + 1];
+            etudiant[i + 1] = tmp;
+        }
+    }
+ }
+ for (int i = 0; i < numEtediant; i++) {
+        printf("**************************\n");
+        printf("Nom: %s\n", etudiant[i].nom);
+        printf("Prenom: %s\n", etudiant[i].prenom);
+        printf("Departement: %s\n", etudiant[i].departement);
+        printf("Note generale: %.2f\n", etudiant[i].noteGenerale);
+        printf("Date de naissance: %d/%d/%d\n", etudiant[i].dateDeNaissance, etudiant[i].dateDeNaissance, etudiant[i].dateDeNaissance);
+        printf("| ID: >%d<|\n", etudiant[i].id);
+    }
+ }
+
 
 int main() {
       int choix;
@@ -438,9 +484,18 @@ int main() {
     case 8 :
         listeAmieChaqueDepartement();
         break;
+    case 9 :
+        triAlphabitique();
+    break;
+
+    case 10 :
+        triMoyenne();
+    break;
+
+
     }
 
-}while(choix < 9);
+}while(choix < 11);
 
 return 0;
 }
